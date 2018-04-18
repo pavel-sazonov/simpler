@@ -27,14 +27,14 @@ class AppLogger
 
   def handler(env)
     if env['simpler.controller']
-      "Handler: #{env['simpler.controller'].name.capitalize}Controller##{env['simpler.action']}"
+      "Handler: #{env['simpler.controller'].class}##{env['simpler.action']}"
     else
       "Handler: none"
     end
   end
 
   def parameters(env)
-    "Parameters: #{env['simpler.params']}"
+    "Parameters: #{env['simpler.controller'].send('params')}"
   end
 
   def response(env, status, headers)
