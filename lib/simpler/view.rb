@@ -10,7 +10,11 @@ module Simpler
     end
 
     def render(binding)
-      ERB.new(str_from_template).result(binding)
+      return template.first.last if template.is_a? Hash
+
+      template = File.read(template_path)
+
+      ERB.new(template).result(binding)
     end
 
     private
@@ -32,14 +36,6 @@ module Simpler
       @env["simpler.view"] = "#{path}.html.erb" unless template
 
       Simpler.root.join(VIEW_BASE_PATH, "#{path}.html.erb")
-    end
-
-    def str_from_template
-      if template.is_a? Hash
-        template.first.last
-      else
-        File.read(template_path)
-      end
     end
 
   end

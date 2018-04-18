@@ -1,7 +1,7 @@
 class TestsController < Simpler::Controller
 
   def index
-    # render plain: "#{@request.params}"
+    # render html: "<h1>jkjkj</h1>"
   end
 
   def create
