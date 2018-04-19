@@ -3,12 +3,13 @@ require_relative 'view'
 module Simpler
   class Controller
 
-    attr_reader :name, :request, :response
+    attr_reader :name, :request, :response, :params
 
     def initialize(env)
       @name = extract_name
       @request = Rack::Request.new(env)
       @response = Rack::Response.new
+      @params = define_params
     end
 
     def not_found
@@ -51,6 +52,8 @@ module Simpler
 
     def render(template)
       @request.env['simpler.template'] = template
+
+      @response['Content-Type'] = 'text/plain' if template.is_a?(Hash) && template.keys.first == :plain
     end
 
     def status(code)
@@ -61,7 +64,7 @@ module Simpler
       @response[header] = value
     end
 
-    def params
+    def define_params
       @request.env['simpler.params'].merge!(@request.params)
     end
 

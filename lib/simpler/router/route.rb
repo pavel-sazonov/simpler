@@ -20,17 +20,17 @@ module Simpler
 
       private
 
-      def compare_paths(path_one, path_two, env)
-        path_one = path_one.split('/')
-        path_two = path_two.split('/')
+      def compare_paths(config_route_path, request_route_path, env)
+        config_route_path = config_route_path.split('/')
+        request_route_path = request_route_path.split('/')
         env['simpler.params'] = {}
 
-        return false unless path_one.size == path_two.size
+        return false unless config_route_path.size == request_route_path.size
 
-        path_one.each_with_index do |el, i|
-          env['simpler.params'][el] = path_two[i] if el[0] == ':'
+        config_route_path.each_with_index do |el, i|
+          env['simpler.params'][el] = request_route_path[i] if el[0] == ':'
 
-          return false if el != path_two[i] && el[0] != ':'
+          return false if el != request_route_path[i] && el[0] != ':'
         end
 
         true

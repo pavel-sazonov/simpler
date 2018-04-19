@@ -20,6 +20,7 @@ module Simpler
       setup_database
       require_app
       require_routes
+      require_renderers
     end
 
     def routes(&block)
@@ -50,6 +51,10 @@ module Simpler
       database_config = YAML.load_file(Simpler.root.join('config/database.yml'))
       database_config['database'] = Simpler.root.join(database_config['database'])
       @db = Sequel.connect(database_config)
+    end
+
+    def require_renderers
+      Dir["#{Simpler.root}/lib/simpler/view/*.rb"].each { |file| require file }
     end
 
     def not_found(env)

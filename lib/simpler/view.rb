@@ -10,7 +10,7 @@ module Simpler
     end
 
     def render(binding)
-      return template.first.last if template.is_a? Hash
+      return choose_renderer(template) if template.is_a? Hash
 
       template = File.read(template_path)
 
@@ -28,12 +28,21 @@ module Simpler
     end
 
     def template
-      @env['simpler.template'] # plain: 'text'
+      @env['simpler.template']
+    end
+
+    def choose_renderer(template)
+      case template.keys.first
+      when :plain
+        Simpler::View::PlainRender.new(template).render
+      when :html
+        Simpler::View::HtmlRender.new(template).render
+      end
     end
 
     def template_path
       path = template || [controller.name, action].join('/')
-      @env["simpler.view"] = "#{path}.html.erb" unless template.is_a? Hash
+      @env["simpler.view"] = "#{path}.html.erb"
 
       Simpler.root.join(VIEW_BASE_PATH, "#{path}.html.erb")
     end

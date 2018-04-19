@@ -34,7 +34,7 @@ class AppLogger
   end
 
   def parameters(env)
-    "Parameters: #{env['simpler.controller'].send('params')}"
+    "Parameters: #{env['simpler.controller'].params}" # send('params')}"
   end
 
   def response(env, status, headers)
