@@ -1,5 +1,3 @@
-require 'erb'
-
 module Simpler
   class View
 
@@ -10,11 +8,10 @@ module Simpler
     end
 
     def render(binding)
-      return choose_renderer(template) if template.is_a? Hash
+      return choose_renderer(template).new.render(template.first.last) if template.is_a? Hash
 
       template = File.read(template_path)
-
-      ERB.new(template).result(binding)
+      Simpler::View::HtmlRender.new.render(template, binding)
     end
 
     private
@@ -33,10 +30,8 @@ module Simpler
 
     def choose_renderer(template)
       case template.keys.first
-      when :plain
-        Simpler::View::PlainRender.new(template).render
-      when :html
-        Simpler::View::HtmlRender.new(template).render
+      when :plain then Simpler::View::PlainRender
+      when :html then Simpler::View::HtmlRender
       end
     end
 

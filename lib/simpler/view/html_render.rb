@@ -1,12 +1,10 @@
+require 'erb'
+
 module Simpler
   class View
     class HtmlRender
-      def initialize(template)
-        @template = template
-      end
-
-      def render
-        @template[:html]
+      def render(template, binding=nil)
+        ERB.new(template).result(binding)
       end
     end
   end
